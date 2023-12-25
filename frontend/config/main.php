@@ -36,14 +36,15 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'outcome/ajax-get-price/<productId:\d+>' => 'outcome/ajax-get-price',
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];
