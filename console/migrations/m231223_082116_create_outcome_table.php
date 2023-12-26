@@ -15,27 +15,23 @@ class m231223_082116_create_outcome_table extends Migration
             'outcome_group_id' => $this->integer(),
             'quantity' => $this->integer()->notNull(),
             'sum' => $this->decimal(10, 2)->notNull(),
-            'date' => $this->date()->notNull(),
+            'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
+            'updated_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+            'deleted_at' => $this->timestamp()->null(),
         ]);
 
+        $this->createIndex(
+            'idx-outcome-product_id',
+            'outcome',
+            'product_id'
+        );
         $this->addForeignKey(
             'fk-outcome-product_id',
             'outcome',
             'product_id',
             'product',
             'id',
-            'CASCADE',
-            'CASCADE'
-        );
-
-
-        $this->addForeignKey(
-            'fk-outcome-outcome_group_id',
-            'outcome',
-            'outcome_group_id',
-            'outcome_groups',
-            'id',
-            'CASCADE',
+            'SET NULL',
             'CASCADE'
         );
     }
@@ -43,7 +39,7 @@ class m231223_082116_create_outcome_table extends Migration
     public function safeDown()
     {
         $this->dropForeignKey('fk-outcome-product_id', 'outcome');
-        $this->dropForeignKey('fk-outcome-outcome_group_id', 'outcome');
+        $this->dropIndex('idx-outcome-product_id', 'outcome');
         $this->dropTable('outcome');
     }
 }

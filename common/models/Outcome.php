@@ -12,37 +12,40 @@ use Yii;
  * @property int|null $outcome_group_id
  * @property int $quantity
  * @property float $sum
- * @property string $date
+ * @property string|null $created_at
+ * @property string|null $updated_at
+ * @property string|null $deleted_at
  *
- * @property OutcomeGroups $outcomeGroup
  * @property Product $product
  */
 class Outcome extends \yii\db\ActiveRecord
 {
-
-    public $total_sum;
-    public $product_count;
     public $product_price;
-    public $product_quantity;
+    public $product_count;
+    public $total_sum;
+
     public static function tableName()
     {
         return 'outcome';
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
             [['product_id', 'outcome_group_id', 'quantity'], 'integer'],
-            [['quantity', 'sum', 'date'], 'required'],
+            [['quantity', 'sum'], 'required'],
             [['sum'], 'number'],
-            [['date'], 'safe'],
-            [['outcome_group_id'], 'exist', 'skipOnError' => true, 'targetClass' => OutcomeGroups::class, 'targetAttribute' => ['outcome_group_id' => 'id']],
+            [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['product_id' => 'id']],
         ];
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
     public function attributeLabels()
     {
         return [
@@ -51,39 +54,19 @@ class Outcome extends \yii\db\ActiveRecord
             'outcome_group_id' => 'Outcome Group ID',
             'quantity' => 'Quantity',
             'sum' => 'Sum',
-            'date' => 'Date',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'deleted_at' => 'Deleted At',
         ];
     }
-    public function getProductCount()
-    {
-        return $this->product_count;
-    }
 
-    public function setProductCount($value)
-    {
-        $this->product_count = $value;
-    }
-
-    public function getTotalSum()
-    {
-        return $this->total_sum;
-    }
-
-    public function setTotalSum($value)
-    {
-        $this->total_sum = $value;
-    }
-
-
-    public function getOutcomeGroup()
-    {
-        return $this->hasOne(OutcomeGroups::class, ['id' => 'outcome_group_id']);
-    }
-
-
+    /**
+     * Gets query for [[Product]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
     public function getProduct()
     {
         return $this->hasOne(Product::class, ['id' => 'product_id']);
     }
 }
-?>

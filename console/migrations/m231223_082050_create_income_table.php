@@ -16,7 +16,9 @@ class m231223_082050_create_income_table extends Migration
             'id' => $this->primaryKey(),
             'product_id' => $this->integer(),
             'amount' => $this->decimal(10, 2)->notNull(),
-            'date' => $this->date()->notNull(),
+            'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
+            'updated_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+            'deleted_at' => $this->timestamp()->null(),
         ]);
 
         $this->addForeignKey(

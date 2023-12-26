@@ -10,7 +10,9 @@ use Yii;
  * @property int $id
  * @property int|null $product_id
  * @property float $amount
- * @property string $date
+ * @property string|null $created_at
+ * @property string|null $updated_at
+ * @property string|null $deleted_at
  *
  * @property Product $product
  */
@@ -31,9 +33,9 @@ class Income extends \yii\db\ActiveRecord
     {
         return [
             [['product_id'], 'integer'],
-            [['amount', 'date'], 'required'],
+            [['amount'], 'required'],
             [['amount'], 'number'],
-            [['date'], 'safe'],
+            [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['product_id' => 'id']],
         ];
     }
@@ -47,7 +49,9 @@ class Income extends \yii\db\ActiveRecord
             'id' => 'ID',
             'product_id' => 'Product ID',
             'amount' => 'Amount',
-            'date' => 'Date',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'deleted_at' => 'Deleted At',
         ];
     }
 

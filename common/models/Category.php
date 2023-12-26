@@ -11,7 +11,6 @@ use Yii;
  * @property string $name
  * @property int|null $status
  *
- * @property Outcome[] $outcomes
  * @property Product[] $products
  */
 class Category extends \yii\db\ActiveRecord
@@ -46,16 +45,6 @@ class Category extends \yii\db\ActiveRecord
             'name' => 'Name',
             'status' => 'Status',
         ];
-    }
-
-    /**
-     * Gets query for [[Outcomes]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOutcomes()
-    {
-        return $this->hasMany(Outcome::class, ['category_id' => 'id']);
     }
 
     /**

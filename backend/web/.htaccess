@@ -1,18 +1,12 @@
-  # use mod_rewrite for pretty URL support
-            RewriteEngine on
-            # If a directory or a file exists, use the request directly
-            RewriteCond %{REQUEST_FILENAME} !-f
-            RewriteCond %{REQUEST_FILENAME} !-d
-            # Otherwise forward the request to index.php
-            RewriteRule . index.php
+AddDefaultCharset utf-8
+RewriteEngine on
 
-            # use index.php as index file
-            DirectoryIndex index.php
+RewriteCond %{REQUEST_FILENAME} !-f
 
-            # ...other settings...
-            # Apache 2.4
-            Require all granted
+RewriteCond %{REQUEST_FILENAME} !-d
 
-            ## Apache 2.2
-            # Order allow,deny
-            # Allow from all
+RewriteRule . index.php
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# This domain inherits the “PHP” package.
+# php -- END cPanel-generated handler, do not edit

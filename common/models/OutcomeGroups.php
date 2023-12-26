@@ -9,8 +9,9 @@ use Yii;
  *
  * @property int $id
  * @property string $name
- *
- * @property Outcome[] $outcomes
+ * @property string|null $created_at
+ * @property string|null $updated_at
+ * @property string|null $deleted_at
  */
 class OutcomeGroups extends \yii\db\ActiveRecord
 {
@@ -29,6 +30,7 @@ class OutcomeGroups extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
+            [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['name'], 'string', 'max' => 255],
         ];
     }
@@ -41,16 +43,9 @@ class OutcomeGroups extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'deleted_at' => 'Deleted At',
         ];
-    }
-
-    /**
-     * Gets query for [[Outcomes]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOutcomes()
-    {
-        return $this->hasMany(Outcome::class, ['outcome_group_id' => 'id']);
     }
 }

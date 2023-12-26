@@ -12,6 +12,9 @@ use Yii;
  * @property float $price
  * @property int|null $quantity
  * @property int|null $category_id
+ * @property string|null $created_at
+ * @property string|null $updated_at
+ * @property string|null $deleted_at
  *
  * @property Category $category
  * @property Income[] $incomes
@@ -19,38 +22,43 @@ use Yii;
  */
 class Product extends \yii\db\ActiveRecord
 {
-
+    /**
+     * {@inheritdoc}
+     */
     public static function tableName()
     {
         return 'product';
     }
 
-    public static function getProductPrice($productId)
-    {
-        $product = self::findOne($productId);
-        return $product->price;
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
             [['name', 'price'], 'required'],
             [['price'], 'number'],
             [['quantity', 'category_id'], 'integer'],
+            [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['name'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
         ];
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
     public function attributeLabels()
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'price' => 'Price',
-            'quantity' => 'Quantity',
-            'category_id' => 'Category ID',
+            'name' => 'Nomi',
+            'price' => 'Narxi',
+            'quantity' => 'Soni',
+            'category_id' => 'Kategoriyasi',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'deleted_at' => 'Deleted At',
         ];
     }
 

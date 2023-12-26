@@ -19,7 +19,7 @@ class OutcomeSearch extends Outcome
         return [
             [['id', 'product_id', 'outcome_group_id', 'quantity'], 'integer'],
             [['sum'], 'number'],
-            [['date'], 'safe'],
+            [['created_at', 'updated_at', 'deleted_at'], 'safe'],
         ];
     }
 
@@ -64,7 +64,9 @@ class OutcomeSearch extends Outcome
             'outcome_group_id' => $this->outcome_group_id,
             'quantity' => $this->quantity,
             'sum' => $this->sum,
-            'date' => $this->date,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'deleted_at' => $this->deleted_at,
         ]);
 
         return $dataProvider;
