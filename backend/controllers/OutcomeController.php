@@ -102,16 +102,31 @@ class OutcomeController extends Controller
         }
     }
 
-    public function actionSaveToSession()
+    public function actionSaveSelectedProducts()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = new Outcome();
 
-        $selectedProducts = Yii::$app->request->post('selectedProducts');
+        if ($model->load(Yii::$app->request->post())) {
+            $model->total_sum = Yii::$app->request->post('Outcome')['total_sum'];
+            $model->product_count = Yii::$app->request->post('Outcome')['product_count'];
+            $model->date = date('Y-m-d H:i:s');
 
-        Yii::$app->session->set('selectedProducts', $selectedProducts);
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Success');
+                return $this->redirect(['index']);
+            } else {
+                Yii::$app->session->setFlash('error', 'Failed to save the outcome.');
+            }
+        }
 
-        return ['success' => true];
+        $products = Product::find()->all();
+
+        return $this->render('create', [
+            'model' => $model,
+            'products' => $products,
+        ]);
     }
+
 
     public function actionUpdate($id)
     {

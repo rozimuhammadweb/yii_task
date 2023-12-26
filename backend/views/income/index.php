@@ -33,8 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'product_id',
             'amount',
-            'created_at',
-            'updated_at',
+//            'created_at',
+//            'updated_at',
             //'deleted_at',
             [
                 'class' => ActionColumn::className(),
