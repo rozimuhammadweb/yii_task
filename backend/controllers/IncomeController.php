@@ -4,9 +4,11 @@ namespace backend\controllers;
 
 use common\models\Income;
 use common\models\IncomeSearch;
+use common\models\Product;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use function Symfony\Component\Mailer\Event\getError;
 
 /**
  * IncomeController implements the CRUD actions for Income model.
@@ -71,6 +73,17 @@ class IncomeController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+                $productId = $model->product_id;
+                $quantityToAdd = (int) $model->amount;
+
+                $product = Product::findOne($productId);
+                if ($product) {
+                    $product->quantity += $quantityToAdd;
+                    $product->save();
+                } else {
+                    return 'error';
+                }
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -81,14 +94,6 @@ class IncomeController extends Controller
             'model' => $model,
         ]);
     }
-
-    /**
-     * Updates an existing Income model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);

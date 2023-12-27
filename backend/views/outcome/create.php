@@ -5,9 +5,6 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/** @var yii\web\View $this */
-/** @var common\models\Outcome $model */
-
 $this->title = 'Create Outcome';
 $this->params['breadcrumbs'][] = ['label' => 'Outcomes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -18,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-lg-3">
                 <?= $form->field($model, 'product_id')->widget(Select2::class, [
                     'data' => ArrayHelper::map($products, 'id', 'name'),
-                    'options' => ['placeholder' => 'Select a product', 'id' => 'product-selector'],
+                    'options' => ['placeholder' => 'Maxsulotni tanlang...', 'id' => 'product-selector'],
                     'pluginOptions' => [
                         'allowClear' => true,
                     ],
@@ -70,6 +67,25 @@ $ajaxUrl = Yii::$app->urlManager->createUrl(['outcome/ajax-get-price']);
 
 $js = <<<JS
     var selectedProducts = [];
+
+function saveToSession() {
+    $.ajax({
+        url: 'OutcomeController/save-to-session',
+        method: 'POST',
+        data: { selectedProducts: JSON.stringify(selectedProducts) },
+        success: function (response) {
+            if (response.success) {
+                console.log('Successfully saved to session.');
+                // Additional logic if needed
+            } else {
+                console.error('Failed to save to session.');
+            }
+        },
+        error: function (error) {
+            console.error('Error:', error);
+        }
+    });
+}
 
     $('#product-selector').on('select2:select', function (e) {
         var productId = e.params.data.id;
@@ -164,9 +180,10 @@ function removeProduct(button) {
 
     selectedProducts.splice(index, 1);
     row.remove();
+
+    // Save to session after removing
     saveToSession();
 }
-
 function saveToSession() {
     $.ajax({
         url: 'OutcomeController/save-to-session',
@@ -198,16 +215,16 @@ function saveToSession() {
         selectedProducts.splice(index, 1);
         $(this).closest('li').remove();
     });
-function saveSelectedProducts() {
+    function saveSelectedProducts() {
     $.ajax({
         url: 'save-selected-products',
         method: 'POST',
-        data: {selectedProducts: JSON.stringify(selectedProducts)},
+        data: { selectedProducts: JSON.stringify(selectedProducts) },
         success: function (response) {
             if (response.success) {
-                console.log('success');
+                console.log('Successfully saved selected products.');
             } else {
-                console.error('Failed');
+                console.error('Failed to save selected products.');
             }
         },
         error: function (error) {

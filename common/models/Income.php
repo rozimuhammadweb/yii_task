@@ -34,7 +34,7 @@ class Income extends \yii\db\ActiveRecord
         return [
             [['product_id'], 'integer'],
             [['amount'], 'required'],
-            [['amount'], 'number'],
+            [['amount'], 'integer'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['product_id' => 'id']],
         ];
@@ -47,8 +47,8 @@ class Income extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'product_id' => 'Product ID',
-            'amount' => 'Amount',
+            'product_id' => 'Maxsulot',
+            'amount' => 'Miqdori',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',

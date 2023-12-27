@@ -127,6 +127,18 @@ class OutcomeController extends Controller
         ]);
     }
 
+    public function actionSaveToSession()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $selectedProducts = Yii::$app->request->post('selectedProducts');
+
+        echo "<pre>";
+        print_r($selectedProducts);
+        echo "</pre>";
+        exit();
+        return ['success' => true];
+    }
 
     public function actionUpdate($id)
     {
@@ -141,13 +153,6 @@ class OutcomeController extends Controller
         ]);
     }
 
-    /**
-     * Deletes an existing Outcome model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -155,13 +160,7 @@ class OutcomeController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Outcome model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return Outcome the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     protected function findModel($id)
     {
         if (($model = Outcome::findOne(['id' => $id])) !== null) {

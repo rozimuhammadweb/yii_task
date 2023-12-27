@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'product_id')->widget(Select2::class, [
                 'data' => ArrayHelper::map(Product::find()->all(), 'id', 'name'),
                 'options' => [
-                    'placeholder' => 'Select a category',
+                    'placeholder' => 'Maxsulotni tanlang...',
                     'class' => 'form-control',
                     'style' => 'background-color: white;',
                 ],

@@ -31,7 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'product_id',
-            'amount',
+            [
+                'attribute' => 'amount',
+                'value' => function ($model) {
+                    return intval($model->amount);
+                },
+            ],
             'created_at',
             'updated_at',
             'deleted_at',
