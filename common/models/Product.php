@@ -25,6 +25,8 @@ class Product extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+
+    public $product_id;
     public static function tableName()
     {
         return 'product';
@@ -39,7 +41,7 @@ class Product extends \yii\db\ActiveRecord
             [['name', 'price'], 'required'],
             [['price'], 'number'],
             [['quantity', 'category_id'], 'integer'],
-            [['created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['created_at','product_id', 'updated_at', 'deleted_at'], 'safe'],
             [['name'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
         ];

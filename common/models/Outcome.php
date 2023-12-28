@@ -20,9 +20,8 @@ use Yii;
  */
 class Outcome extends \yii\db\ActiveRecord
 {
-    public $product_price;
+
     public $product_count;
-    public $total_sum;
 
     public static function tableName()
     {
@@ -69,4 +68,6 @@ class Outcome extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Product::class, ['id' => 'product_id']);
     }
+
+
 }

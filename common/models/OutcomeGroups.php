@@ -29,11 +29,12 @@ class OutcomeGroups extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'nullable'],
+            ['name', 'default', 'value' => null],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
-            [['name'], 'string', 'max' => 255],
+            ['name', 'string', 'max' => 255],
         ];
     }
+
 
     /**
      * {@inheritdoc}
@@ -42,6 +43,7 @@ class OutcomeGroups extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'name' => 'Name',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',

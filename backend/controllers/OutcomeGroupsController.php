@@ -13,9 +13,7 @@ use yii\filters\VerbFilter;
  */
 class OutcomeGroupsController extends Controller
 {
-    /**
-     * @inheritDoc
-     */
+
     public function behaviors()
     {
         return array_merge(
@@ -31,11 +29,7 @@ class OutcomeGroupsController extends Controller
         );
     }
 
-    /**
-     * Lists all OutcomeGroups models.
-     *
-     * @return string
-     */
+
     public function actionIndex()
     {
         $searchModel = new OutcomeGroupsSearch();
@@ -47,12 +41,7 @@ class OutcomeGroupsController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single OutcomeGroups model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -60,11 +49,7 @@ class OutcomeGroupsController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new OutcomeGroups model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
+
     public function actionCreate()
     {
         $model = new OutcomeGroups();
@@ -82,13 +67,7 @@ class OutcomeGroupsController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing OutcomeGroups model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -102,13 +81,7 @@ class OutcomeGroupsController extends Controller
         ]);
     }
 
-    /**
-     * Deletes an existing OutcomeGroups model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -116,13 +89,7 @@ class OutcomeGroupsController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the OutcomeGroups model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return OutcomeGroups the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     protected function findModel($id)
     {
         if (($model = OutcomeGroups::findOne(['id' => $id])) !== null) {
