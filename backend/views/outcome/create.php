@@ -13,7 +13,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $form = ActiveForm::begin(['action' => ['test'], 'options' => ['id' => 'addCart']]); ?>
     <div class="row">
         <div class="col-lg-3">
-            <?= $form->field($model, 'product_id')->widget(Select2::class, [
+            <?= /** @var TYPE_NAME $products */
+            $form->field($model, 'product_id')->widget(Select2::class, [
                 'data' => ArrayHelper::map($products, 'id', 'name'),
                 'options' => ['placeholder' => 'Maxsulotni tanlang...', 'id' => 'product-selector'],
                 'pluginOptions' => [
@@ -42,19 +43,22 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row">
             <h3>Tanlangan Mahsulotlar</h3>
             <div class="pt-5" id="selected-products-container">
-                <?= $this->render('table', ['lists' => $selectedProducts]); ?>
+                <?= /** @var TYPE_NAME $selectedProducts */
+                $this->render('table', ['lists' => $selectedProducts]); ?>
             </div>
         </div>
-        <div class="form-group col-lg-2">
-            <?= Html::submitButton('Saqlash', ['class' => 'btn btn-success py-3  px-5 mt-5', 'name' => 'submit-button', 'value' => 'save']) ?>
-        </div>
+    </div>
+    <?php ActiveForm::end(); ?>
+
+    <?php ActiveForm::begin(['action' => ['save-outcome'], 'options' => ['id' => 'save',]]); ?>
+    <div class="form-group col-lg-2">
+        <?= Html::submitButton('Saqlash', ['class' => 'btn btn-success py-3 px-5 mt-5', 'name' => 'save-button', 'value' => 'save']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 </div>
 
 <?php
 $js = <<< JS
-
 $('#product-selector').on('select2:select', function (e) {
     getProductDetails(e.params.data.id);
 });
@@ -74,7 +78,6 @@ $(document).on('submit', '#addCart', function (e) {
     e.preventDefault();
     var form = $(this);
     var url = form.attr('action');
-
     $.ajax({
         url: url,
         type: 'POST',
@@ -146,6 +149,7 @@ $(document).on('click', '.delete-product', function () {
     });
 });
 
+//update
 function updateSelectedProductsView(view) {
     $('#selected-products-container').innerHTML='';
     $('#selected-products-container').html(view);

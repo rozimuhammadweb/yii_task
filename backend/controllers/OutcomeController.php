@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\Outcome;
+use common\models\OutcomeGroups;
 use common\models\OutcomeSearch;
 use common\models\Product;
 use common\models\ProductList;
@@ -29,18 +30,14 @@ class OutcomeController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
-
                     ],
+
                 ],
+
             ]
         );
     }
 
-    /**
-     * Lists all Outcome models.
-     *
-     * @return string
-     */
     public function actionIndex()
     {
         $searchModel = new OutcomeSearch();
@@ -52,12 +49,6 @@ class OutcomeController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Outcome model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -65,11 +56,6 @@ class OutcomeController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Outcome model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|Response
-     */
     public function actionCreate()
     {
         $model = new ProductList();
@@ -85,7 +71,6 @@ class OutcomeController extends Controller
                     $selectedProducts = ProductList::find()->all();
                 }
             } elseif ($model->save()) {
-//                $selectedProducts = ProductList::find()->all();
                 return $this->redirect(['index']);
 
             }
@@ -113,7 +98,6 @@ class OutcomeController extends Controller
         }
     }
 
-
     public function actionAjaxGetPrice($productId)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -133,6 +117,7 @@ class OutcomeController extends Controller
             return ['error' => 'Product topilmadi'];
         }
     }
+
     public function actionDeleteProductList()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -153,70 +138,49 @@ class OutcomeController extends Controller
         }
     }
 
-
-    public function actionSaveSelectedProducts()
+    public function actionSaveOutcome()
     {
-        $selectedProducts = Yii::$app->request->post('selectedProducts');
+        $request = Yii::$app->request;
 
-        foreach ($selectedProducts as $selectedProduct) {
-            $productId = $selectedProduct['product_id'];
-            $quantity = $selectedProduct['count'];
+        if ($request->isPost) {
+            $selectedProducts = ProductList::find()->all();
 
+            foreach ($selectedProducts as $selectedProduct) {
+                $productId = $selectedProduct['product_id'];
+                $quantity = $selectedProduct['quantity'];
 
-            $product = Product::findOne($productId);
-            if (!$product || $product->quantity < $quantity) {
-                $response = ['success' => false, 'message' => 'Mahsulot soni bazada yetarli emas: ' . $productId];
-                Yii::$app->response->format = Response::FORMAT_JSON;
-                return $response;
+                $product = Product::findOne($productId);
+                if (!$product || $product->quantity < $quantity) {
+                    $response = ['success' => false, 'message' => 'Mahsulot soni bazada yetarli emas: ' . $productId];
+                    Yii::$app->response->format = Response::FORMAT_JSON;
+                    return $response;
+                }
+
+                $model = new Outcome();
+                $model->attributes = [
+                    'product_id' => $productId,
+                    'quantity' => $quantity,
+                    'sum' => $quantity * $product->price,
+                    'outcome_group_id' => $this->getOutcomeGroupId(),
+                ];
+
+                if (!$model->save()) {
+                    $response = ['success' => false, 'message' => 'Xatolik outcome saqlashda'];
+                    Yii::$app->response->format = Response::FORMAT_JSON;
+                    return $response;
+                }
+
+                $product->quantity -= $quantity;
+                $product->save();
+
+                ProductList::deleteAll(['product_id' => $productId]);
             }
 
-
-            $model = new Outcome();
-            $model->attributes = [
-                'product_id' => $productId,
-                'quantity' => $quantity,
-                'outcome_group_id' => $selectedProduct['outcome_group_id'],
-            ];
-
-
-            if (!$model->save()) {
-                $response = ['success' => false, 'message' => 'Xatolik outcome saqlashda'];
-                Yii::$app->response->format = Response::FORMAT_JSON;
-                return $response;
-            }
-
-            $product->quantity -= $quantity;
-            $product->save();
+            return $this->redirect('index');
         }
 
-        $response = ['success' => true];
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return $response;
+        return $this->redirect(['index']);
     }
-
-
-    public function actionSaveToList()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
-        $productId = Yii::$app->request->post('product_id');
-        $quantity = Yii::$app->request->post('quantity');
-
-
-        $productList = new ProductList();
-        $productList->product_id = $productId;
-        $productList->quantity = $quantity;
-        $productList->save();
-
-        return ['success' => true];
-    }
-
-    public function actionGetSelectedProducts()
-    {
-        $lists = ProductList::find()->all();
-        return $this->renderPartial('table', ['lists' => $lists]);
-    }
-
 
     public function actionUpdate($id)
     {
@@ -237,6 +201,16 @@ class OutcomeController extends Controller
 
         return $this->redirect(['index']);
     }
+
+    private function getOutcomeGroupId()
+    {
+        $outcomeGroup = OutcomeGroups::find()
+            ->orderBy(['created_at' => SORT_DESC])
+            ->one();
+
+        return $outcomeGroup ? $outcomeGroup->id : null;
+    }
+
 
 
     protected function findModel($id)

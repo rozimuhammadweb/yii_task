@@ -49,13 +49,13 @@ class Outcome extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'product_id' => 'Product ID',
+            'product_id' => 'Nomi',
             'outcome_group_id' => 'Outcome Group ID',
-            'quantity' => 'Quantity',
-            'sum' => 'Sum',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'deleted_at' => 'Deleted At',
+            'quantity' => 'Miqdori',
+            'sum' => 'Ummimiy summa',
+            'created_at' => 'Yaratilgan',
+            'updated_at' => 'Yangilangan',
+            'deleted_at' => 'O\'chirilgan',
         ];
     }
 

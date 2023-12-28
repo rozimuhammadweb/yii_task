@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /** @var yii\web\View $this */
 /** @var common\models\OutcomeSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -29,20 +30,37 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            [
+                'attribute' => 'product_id',
+                'value' => function ($model) {
+                    return $model->product->name;
+                },
+            ],
+            [
+                'attribute' => 'quantity',
+                'value' => function ($model) {
+                    return $model->quantity . ' dona';
+                },
+            ],
+            [
+                'attribute' => 'sum',
+                'value' => function ($model) {
+                    return Yii::$app->formatter->asInteger($model->sum) . ' so\'m';
+                },
+            ],
 
-            'id',
-            'product_id',
+            [
+                'attribute' => 'created_at',
+                'value' => function ($model) {
+                    return Yii::$app->formatter->asDate($model->created_at);
+                },
+            ],
             'outcome_group_id',
-            'quantity',
-            'sum',
-            //'created_at',
-            //'updated_at',
-            //'deleted_at',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Outcome $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
     ]); ?>
