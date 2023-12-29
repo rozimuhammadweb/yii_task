@@ -25,10 +25,8 @@ AppAsset::register($this);
         <?php $this->beginBody() ?>
 
         <div class="wrapper bg-ash">
-<!--            --><?//= Navbar::widget() ?>
             <div class="dashboard-page-one">
                 <div class="sidebar-main sidebar-menu-one sidebar-expand-md sidebar-color">
-<!--                    --><?//= Sidebar::widget() ?>
                 </div>
                 <div class="dashboard-content-one">
                     <?= $content ?>

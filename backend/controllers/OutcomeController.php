@@ -90,7 +90,7 @@ class OutcomeController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $product = Product::findOne($model->product_id);
-            if ($product && $model->quantity > $product->quantity) {
+            if ($product && $model->quantity+$product->listAmountSum > $product->quantity) {
                 return ['success' => false, 'message' => 'Mahsulot soni yetarli emas: ' . $model->product_id];
             }
             if ($model->save()) {

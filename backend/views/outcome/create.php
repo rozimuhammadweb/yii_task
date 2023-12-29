@@ -92,10 +92,10 @@ $(document).on('submit', '#addCart', function (e) {
                 if (data.hasOwnProperty('view')) {
                     updateSelectedProductsView(data.view);
                 } else {
-                    console.error('Error');
+                    alert('Mahsulot soni yetarli emas. Maxsulot soni: ' + availableQuantity);
                 }
             } else {
-                console.error('Error:', data.message); 
+                alert('Mahsulot soni yetarli emas. Maxsulot soni: ' + availableQuantity); 
             }
         },
         error: function (xhr, status, error) {
