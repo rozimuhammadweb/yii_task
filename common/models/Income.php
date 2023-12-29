@@ -49,9 +49,9 @@ class Income extends \yii\db\ActiveRecord
             'id' => 'ID',
             'product_id' => 'Maxsulot',
             'amount' => 'Miqdori',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'deleted_at' => 'Deleted At',
+            'created_at' => 'Yaratilgan',
+            'updated_at' => 'Yangilnagan',
+            'deleted_at' => 'O\'chirilgan',
         ];
     }
 

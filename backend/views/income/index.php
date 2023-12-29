@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /** @var yii\web\View $this */
 /** @var common\models\IncomeSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -40,14 +41,16 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'amount',
                 'value' => function ($model) {
-                    return intval($model->amount);
+                    return intval($model->amount) . ' dona';
                 },
             ],
+
+            'created_at',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Income $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
     ]); ?>

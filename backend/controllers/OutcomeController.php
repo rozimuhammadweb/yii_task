@@ -59,13 +59,13 @@ class OutcomeController extends Controller
     public function actionCreate()
     {
         $model = new ProductList();
-        $products = Product::find()->all();
+        $products = Product::find()->where(['>', 'quantity', 0])->all();
         $selectedProducts = ProductList::find()->all();
         if ($model->load(Yii::$app->request->post())) {
             if (Yii::$app->request->post('submit-button') === 'add-to-list') {
                 $selectedProduct = new ProductList();
                 $selectedProduct->product_id = $model->product_id;
-                $selectedProduct->quantity = Yii::$app->request->post('ProductList')['quantity']; // Set quantity explicitly
+                $selectedProduct->quantity = Yii::$app->request->post('ProductList')['quantity'];
 
                 if ($selectedProduct->save()) {
                     $selectedProducts = ProductList::find()->all();
@@ -88,15 +88,24 @@ class OutcomeController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new ProductList();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $lists = ProductList::find()->all();
-            $view = $this->renderAjax('table', ['lists' => $lists]);
-            return [
-                'success' => true,
-                'view' => $view
-            ];
+        if ($model->load(Yii::$app->request->post())) {
+            $product = Product::findOne($model->product_id);
+            if ($product && $model->quantity > $product->quantity) {
+                return ['success' => false, 'message' => 'Mahsulot soni yetarli emas: ' . $model->product_id];
+            }
+            if ($model->save()) {
+                $lists = ProductList::find()->all();
+                $view = $this->renderAjax('table', ['lists' => $lists]);
+                return [
+                    'success' => true,
+                    'view' => $view
+                ];
+            }
         }
+
+        return ['success' => false, 'message' => 'Xatolik productlist saqlashda'];
     }
+
 
     public function actionAjaxGetPrice($productId)
     {
@@ -108,10 +117,12 @@ class OutcomeController extends Controller
 
             $quantity = intval($quantity);
             $price = floatval($price);
+            $availableQuantity = $product->quantity;
 
             return [
                 'price' => $price,
                 'totalSum' => $price * $quantity,
+                'availableQuantity' => $availableQuantity,
             ];
         } else {
             return ['error' => 'Product topilmadi'];
@@ -138,6 +149,23 @@ class OutcomeController extends Controller
         }
     }
 
+    private function findOrCreateOutcomeGroup()
+    {
+        $timestamp = time();
+        $outcomeGroupName = 'group_' . $timestamp;
+
+        $outcomeGroup = OutcomeGroups::find()->where(['name' => $outcomeGroupName])->one();
+
+        if (!$outcomeGroup) {
+            $outcomeGroup = new OutcomeGroups();
+            $outcomeGroup->name = $outcomeGroupName;
+            $outcomeGroup->save();
+        }
+
+        return $outcomeGroup;
+    }
+
+
     public function actionSaveOutcome()
     {
         $request = Yii::$app->request;
@@ -157,11 +185,12 @@ class OutcomeController extends Controller
                 }
 
                 $model = new Outcome();
+                $outcomeGroup = $this->findOrCreateOutcomeGroup();
                 $model->attributes = [
                     'product_id' => $productId,
                     'quantity' => $quantity,
                     'sum' => $quantity * $product->price,
-                    'outcome_group_id' => $this->getOutcomeGroupId(),
+                    'outcome_group_id' => $outcomeGroup ? $outcomeGroup->id : null,
                 ];
 
                 if (!$model->save()) {
@@ -201,16 +230,6 @@ class OutcomeController extends Controller
 
         return $this->redirect(['index']);
     }
-
-    private function getOutcomeGroupId()
-    {
-        $outcomeGroup = OutcomeGroups::find()
-            ->orderBy(['created_at' => SORT_DESC])
-            ->one();
-
-        return $outcomeGroup ? $outcomeGroup->id : null;
-    }
-
 
 
     protected function findModel($id)

@@ -39,8 +39,10 @@ class ProductList extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'product_id' => 'Product ID',
-            'quantity' => 'Quantity',
+            'product_id' => 'Maxsulot',
+            'quantity' => 'Miqdori',
+            'price' => 'Narxi',
+            'total_sum' => 'Ummumiy summa',
         ];
     }
 

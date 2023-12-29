@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "outcome".
@@ -18,7 +19,7 @@ use Yii;
  *
  * @property Product $product
  */
-class Outcome extends \yii\db\ActiveRecord
+class Outcome extends ActiveRecord
 {
 
     public $product_count;
@@ -28,9 +29,6 @@ class Outcome extends \yii\db\ActiveRecord
         return 'outcome';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
@@ -42,9 +40,7 @@ class Outcome extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+
     public function attributeLabels()
     {
         return [
@@ -59,11 +55,7 @@ class Outcome extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * Gets query for [[Product]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
+
     public function getProduct()
     {
         return $this->hasOne(Product::class, ['id' => 'product_id']);

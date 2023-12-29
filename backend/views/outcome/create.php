@@ -118,6 +118,11 @@ function getProductDetails(productId) {
                 if (result.hasOwnProperty('price') && result.hasOwnProperty('totalSum')) {
                     $('#price-input').val(result.price);
                     $('#total-sum-input').val(result.totalSum);
+
+                    var availableQuantity = result.availableQuantity;
+                    if (quantity > availableQuantity) {
+                        alert('Mahsulot soni yetarli emas. Maxsulot soni: ' + availableQuantity);
+                    }
                 } else {
                     console.error('Unexpected response:', result);
                 }

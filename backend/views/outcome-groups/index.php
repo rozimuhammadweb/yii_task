@@ -17,9 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Outcome Groups', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -29,12 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
             'name',
             'created_at',
-            'updated_at',
-            'deleted_at',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, OutcomeGroups $model, $key, $index, $column) {

@@ -30,11 +30,25 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
 
-                'id',
                 'name',
-                'price',
-                'quantity',
-                'category_id',
+                [
+                    'attribute' => 'price',
+                    'value' => function ($model) {
+                        return Yii::$app->formatter->asInteger($model->price) . " so'm";
+                    },
+                ],
+                [
+                    'attribute' => 'quantity',
+                    'value' => function ($model) {
+                        return $model->quantity . " dona";
+                    },
+                ],
+                [
+                    'attribute' => 'category_id',
+                    'value' => function ($model) {
+                        return $model->category->name;
+                    },
+                ],
                 [
                     'class' => ActionColumn::className(),
                     'urlCreator' => function ($action, Product $model, $key, $index, $column) {

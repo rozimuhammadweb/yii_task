@@ -3,37 +3,27 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
-/**
- * This is the model class for table "outcome_groups".
- *
- * @property int $id
- * @property string $name
- * @property string|null $created_at
- * @property string|null $updated_at
- * @property string|null $deleted_at
- */
-class OutcomeGroups extends \yii\db\ActiveRecord
+
+class OutcomeGroups extends ActiveRecord
 {
-    /**
-     * {@inheritdoc}
-     */
+
     public static function tableName()
     {
         return 'outcome_groups';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+
     public function rules()
     {
         return [
-            ['name', 'default', 'value' => null],
-            [['created_at', 'updated_at', 'deleted_at'], 'safe'],
+            ['name', 'required'],
             ['name', 'string', 'max' => 255],
+            [['created_at', 'updated_at', 'deleted_at'], 'safe'],
         ];
     }
+
 
 
     /**
